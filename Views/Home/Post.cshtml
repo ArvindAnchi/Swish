@@ -1,0 +1,270 @@
+﻿@model PostModel
+@{<div class="card mt-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-auto">
+                    <img class="rounded-circle"
+                         style="width:50px;height:50px"
+                         src="~/Images/@ViewBag.Post.PosterUser.PPicPath" />
+                </div>
+                <div class="col-auto p-0 mt-auto mb-auto">
+                    <span>
+                        <b>@ViewBag.Post.PosterUser.FName @ViewBag.Post.PosterUser.LName</b>
+                        <span class="text-muted">
+                            (@@@ViewBag.Post.PosterUser.UserName) &bull; @ViewBag.Post.PostDt.ToString("dd MMM yyyy")
+                        </span>
+                    </span>
+                </div>
+                <div class="col m-auto text-right">
+                    @if (ViewBag.Post.PosterUser.UserName == Context.User.Identity.Name || ViewBag.Cureuser.IsAdmin)
+                    {
+                        <form asp-action="DeletePost" asp-controller="Home" method="post">
+                            <div class="dropdown">
+                                <button class="dot3 btn" type="button" id="Post-@ViewBag.Post.PostID-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="Post-@ViewBag.Post.PostID-dropdown">
+                                    <button class="dropdown-item" type="submit" asp-action="DeletePost" asp-controller="Home" asp-route-PostID="@ViewBag.Post.PostID">Delete post</button>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row m-2">
+                <div class="w-100">
+                    <div class="w-100 mb-3">@ViewBag.Post.PostTxt</div>
+                    <div class="w-100">
+                        <div>
+                            @if (Enumerable.Count(ViewBag.Post.PostImages) > 0)
+                            {
+                                if (ViewBag.Post.PostImages[0].IsVideo)
+                                {
+                                    <video style="object-fit: cover; max-height: 50vh"
+                                           src="~/Images/@(ViewBag.Post.PostImages[0].Image)"
+                                           alt="Alternate Text"
+                                           data-toggle="modal"
+                                           data-target="#ImgModal-@ViewBag.Post.PostID"
+                                           onclick="$('#ImgCrsControls-@ViewBag.Post.PostID').carousel(0);" />
+                                }
+                                else
+                                {
+                                    <img style="object-fit: cover; max-height: 50vh"
+                                         src="~/Images/@(ViewBag.Post.PostImages[0].Image).png"
+                                         alt="Alternate Text"
+                                         data-toggle="modal"
+                                         data-target="#ImgModal-@ViewBag.Post.PostID"
+                                         onclick="$('#ImgCrsControls-@ViewBag.Post.PostID').carousel(0);" />
+                                }
+                            }
+                        </div>
+                        @if (ViewBag.Post.PostImages.Count > 1)
+                        {
+                            <hr />
+                            <div class="row">
+                                <div class="m-auto col-auto"><button type="button" style="background-color: rgba(128, 128, 128,.5); border: none; outline: none; width: 25px; height: 25px" onclick="$('#content-@ViewBag.Post.PostID').animate({ scrollLeft: '-=150px' }, 'fast');" class="rounded-circle" id="left-button">&lt;</button></div>
+                                <div class="col p-0" id="content-@ViewBag.Post.PostID" style="white-space: nowrap; overflow-x: scroll">
+                                    @for (int pImageIndex = 1; pImageIndex < ViewBag.Post.PostImages.Count; pImageIndex++)
+                                    {
+                                        if (ViewBag.Post.PostImages[pImageIndex].IsVideo)
+                                        {
+                                            <video style="width: 100px; height: 100px; object-fit: cover"
+                                                   src="~/Images/@(ViewBag.Post.PostImages[pImageIndex].Image)"
+                                                   alt="Alternate Text"
+                                                   data-toggle="modal"
+                                                   data-target="#ImgModal-@ViewBag.Post.PostID"
+                                                   onclick="$('#ImgCrsControls-@ViewBag.Post.PostID').carousel(@pImageIndex);" />
+                                        }
+                                        else
+                                        {
+                                            <img style="width: 100px; height: 100px; object-fit: cover"
+                                                 src="~/Images/@(ViewBag.Post.PostImages[pImageIndex].Image)-Thumb.png"
+                                                 alt="Alternate Text"
+                                                 data-toggle="modal"
+                                                 data-target="#ImgModal-@ViewBag.Post.PostID"
+                                                 onclick="$('#ImgCrsControls-@ViewBag.Post.PostID').carousel(@pImageIndex);" />
+                                        }
+                                    }
+                                </div>
+                                <div class="m-auto col-auto"><button type="button" style="background-color: rgba(128, 128, 128,.5); border: none; outline: none; width: 25px; height: 25px" onclick="$('#content-@ViewBag.Post.PostID').animate({ scrollLeft: '+=150px' }, 'fast');" class="rounded-circle" id="left-button">&gt;</button></div>
+                            </div>
+                        }
+                        <div class="modal fade"
+                             id="ImgModal-@ViewBag.Post.PostID"
+                             tabindex="-1"
+                             role="dialog"
+                             aria-labelledby="exampleModalCenterTitle"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content" style="height: 90vh">
+                                    <div class="modal-body">
+                                        <div id="ImgCrsControls-@ViewBag.Post.PostID" class="carousel slide h-100" data-ride="carousel">
+                                            <div class="carousel-inner h-100 flex-column">
+                                                <div class="carousel-item h-100 active">
+                                                    <div class="w-100" style="position: absolute; top: 50%; transform: translateY(-50%);">
+
+                                                        @if (Enumerable.Count(ViewBag.Post.PostImages) > 0)
+                                                        {
+                                                            if (ViewBag.Post.PostImages[0].IsVideo)
+                                                            {
+                                                                <video class="d-block"
+                                                                       autoplay="autoplay"
+                                                                       style="max-height: 100%; max-width: 100%; margin: auto"
+                                                                       src="~/Images/@(ViewBag.Post.PostImages[0].Image)"
+                                                                       alt="Alternate Text"
+                                                                       controls />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img class="d-block"
+                                                                     style="max-height: 100%; max-width: 100%; margin: auto"
+                                                                     src="~/Images/@(ViewBag.Post.PostImages[0].Image).png"
+                                                                     alt="Alternate Text">
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                @if (ViewBag.Post.PostImages.Count > 1)
+                                                {
+                                                    for (int pImageIndex = 1; pImageIndex < ViewBag.Post.PostImages.Count; pImageIndex++)
+                                                    {
+                                                        <div class="carousel-item h-100">
+                                                            <div class="w-100" style="position: absolute; top: 50%; transform: translateY(-50%);">
+                                                                @if (ViewBag.Post.PostImages[pImageIndex].IsVideo)
+                                                                {
+                                                                    <video class="d-block"
+                                                                           style="max-height: 100%; max-width: 100%; margin: auto"
+                                                                           src="~/Images/@(ViewBag.Post.PostImages[pImageIndex].Image)"
+                                                                           alt="Alternate Text"
+                                                                           controls />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img class="d-block"
+                                                                         style="max-height: 100%; max-width: 100%; margin: auto"
+                                                                         src="~/Images/@(ViewBag.Post.PostImages[pImageIndex].Image).png"
+                                                                         alt="Alternate Text">
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            @if (ViewBag.Post.PostImages.Count > 1)
+                                            {
+                                                <a class="carousel-control-prev" href="#ImgCrsControls-@ViewBag.Post.PostID" role="button" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#ImgCrsControls-@ViewBag.Post.PostID" role="button" data-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-header border-top border-bottom-0">
+            <div class="row text-right">
+                @if (ViewBag.Post.mylike > 0)
+                {
+                    <button id="btnlike-@ViewBag.Post.PostID" class="text-primary form-control w-auto ml-2" onclick="PLike(@ViewBag.Post.PostID)">
+                        <i class="fas fa-thumbs-up"></i> <span class="badge badge-primary" id="PLikes-@ViewBag.Post.PostID">@ViewBag.Post.PLikes</span>
+                    </button>
+                }
+                else
+                {
+                    <button id="btnlike-@ViewBag.Post.PostID" class="form-control w-auto ml-2" onclick="PLike(@ViewBag.Post.PostID)">
+                        <i class="fas fa-thumbs-up"></i> <span class="badge badge-primary" id="PLikes-@ViewBag.Post.PostID">@ViewBag.Post.PLikes</span>
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="list-group-item pl-3 pt-1 pb-1"
+             style="border-left : none; border-right : none; border-bottom : none">
+            <div id="Post-@ViewBag.Post.PostID">
+                @foreach (var Comment in ViewBag.Post.Comments)
+                {
+                    if (Comment.Deleted == false)
+                    {
+                        <form asp-controller="Home" asp-action="Deletecomment" method="post">
+                            <div class="row m-2">
+                                <div class="col-auto">
+                                    <img class="rounded-circle"
+                                         style="width:38px;height:38px"
+                                         src="~/Images/@Comment.PPicPath" />
+                                </div>
+                                <div class="col-auto p-0">
+                                    <span style="font-size : 0.95rem">
+                                        <b>@Comment.Fname @Comment.Lname</b>
+                                        <span class="text-muted">(@@@Comment.UName)</span><br />
+                                        @Comment.CommentTxt
+                                        @if (Comment.UName == Context.User.Identity.Name || ViewBag.Cureuser.IsAdmin)
+                                        {
+                                            <br />
+                                            <button asp-area=""
+                                                    asp-controller="Home"
+                                                    asp-action="Deletecomment"
+                                                    asp-route-ComID="@Comment.ComID" type="submit" class="btn btn-link btn-sm p-0">
+                                                <u class="text-danger">Delete</u>
+                                            </button>
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="row m-2">
+                            <div class="col-auto">
+                                <img class="rounded-circle"
+                                     style="width:38px;height:38px"
+                                     src="~/Images/ProfilePlaceholder.png" />
+                            </div>
+                            <div class="col-auto p-0">
+                                <span style="font-size : 0.95rem">
+                                    <b class="text-muted">[Deleted]</b><br />
+                                    <i class="text-muted">Comment was deleted</i>
+                                </span>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="row m-2">
+                <div class="col-auto">
+                    <img class="rounded-circle"
+                         style="width:38px;height:38px"
+                         src="~/Images/@ViewBag.picpath" />
+                </div>
+                <div class="col p-0">
+                    <input class="form-control w-100 rounded-pill ComTxt"
+                           type="text"
+                           placeholder="Enter comment here"
+                           id="@ViewBag.Post.PostID" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/js/PostSR.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".carousel").carousel({ interval: false });
+            for (var i = 0; i < document.getElementsByClassName("NavPPic").length; i++) {
+            }
+        });
+    </script>
+}

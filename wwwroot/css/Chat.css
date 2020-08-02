@@ -1,0 +1,18 @@
+﻿.sender-bubble {
+    position: relative;
+    background: #007bff;
+    border-radius: .5em;
+}
+
+.reciever-bubble {
+    position: relative;
+    background: #ced4da;
+    border-radius: .5em;
+}
+
+.BreakWord {
+    max-width:100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}

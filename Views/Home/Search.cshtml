@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="row mb-3">
+    <h1 class="col-auto">Search</h1>
+    <div class="col text-right">
+        <button class="btn btn-primary h-100" id="SBUN" onclick="window.location.href = '/Home/Search?Query=@@' + GetURLParameter('Query');">Search by Username</button>
+        <button class="btn btn-primary h-100" id="SBN" onclick="window.location.href ='/Home/Search?Query=' + GetURLParameter('Query').substring(1);">Search by Name</button>
+    </div>
+</div>
+
+@if ((ViewBag.ResUsers as List<Swish.Areas.Identity.Data.SwishUser>).Count() > 0)
+{
+    foreach (var TUser in ViewBag.ResUsers)
+    {
+
+        <div class="list-group-item list-group-item-action"
+             id="UserBtn"
+             onclick="UserBtnClick('@TUser.Id', '@TUser.UserName')">
+            <div class="row">
+                <div class="col-auto mr-2">
+                    <img class="rounded-circle"
+                         style="width:35px;height:35px"
+                         src="~/Images/@TUser.PPicPath" />
+                </div>
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-form-label p-0" id="@TUser.UserName">@TUser.FName @TUser.LName <h6><small>@TUser.UserName</small></h6></div>
+                    </div>
+                    <div class="row" id="@TUser.Id"></div>
+                </div>
+                <div class="col text-right">
+                    <button class="btn btn-primary" onclick="window.location.href = '/Home/Profile?User=@TUser.UserName';">Visit profile</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#FriendModal">Add Friend</button>
+                </div>
+            </div>
+        </div>
+    }
+}
+@if ((ViewBag.ResUsers as List<Swish.Areas.Identity.Data.SwishUser>).Count() > 0)
+{
+    foreach (var TUser in ViewBag.ResUsers)
+    {
+        <form asp-controller="Home" asp-action="AddFriend" asp-route-User="@TUser.UserName" asp-route-ForConfirm="false">
+            <div class="modal fade" id="FriendModal" tabindex="-1" role="dialog" aria-labelledby="FriendModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Friend</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Send friend request to @TUser.UserName? </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Send request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+}
+
+<script>
+    function GetURLParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+    };
+
+    if (GetURLParameter('Query')[0] == "@@")
+        document.getElementById('SBUN').style.display = "none";
+    else
+        document.getElementById('SBN').style.display = "none";
+
+</script>

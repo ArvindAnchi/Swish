@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Swish.Areas.Identity.Data
+@inject SignInManager<SwishUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Swish</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/DarkMode/dark-mode.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/429afe11cc.js" crossorigin="anonymous"></script>
+    <style>
+        .form-control:focus {
+            outline: none !important;
+            box-shadow: none !important
+        }
+    </style>
+</head>
+<body>
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom box-shadow">
+            <div class="container-fluid m-sm-0 w-100">
+                <a class="navbar-brand flex-nowrap p-0" asp-area="" asp-controller="Home" asp-action="Index"><img style="max-width: 30px; max-height:30px" src="~/Images/Swish.png" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-md-inline-flex flex-md-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile" asp-route-User="@User.Identity.Name">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ChatHub">Chat</a>
+                        </li>
+                        <li class="nav-item m-md-auto">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="SearchTxt" placeholder="Search people...">
+                                <span class="input-group-append input-group-btn">
+                                    <button class="btn btn-secondary" type="button" onclick="GoToSearch()"><i class="fas fa-search"></i></button>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid pt-3">
+        <div id="ToastDiv" class="position-absolute w-100 pr-5 d-flex flex-column" style="z-index: 1"></div>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Date.js"></script>
+    <script src="~/lib/DarkMode/dark-mode-switch.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/NotifSR.js"></script>
+    <script>
+        $('#UserDropDownBtn').on('click', function (event) {
+            $('#UserDropDownMenu').toggleClass('show');
+        });
+
+        $('body').on('click', function (e) {
+            if (!$('#UserDropDown').is(e.target)
+                && $('#UserDropDown').has(e.target).length === 0
+                && $('.open').has(e.target).length === 0
+            ) {
+                $('#UserDropDownMenu').removeClass('show');
+            }
+        });
+
+        $('#NotifDropDownBtn').on('click', function (event) {
+            $('#NotifDropDownMenu').toggleClass('show');
+        });
+
+        $('body').on('click', function (e) {
+            if (!$('#NotifDropDown').is(e.target)
+                && $('#NotifDropDown').has(e.target).length === 0
+                && $('.open').has(e.target).length === 0
+            ) {
+                $('#NotifDropDownMenu').removeClass('show');
+            }
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

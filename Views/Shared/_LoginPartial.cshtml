@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Swish.Areas.Identity.Data
+@inject SignInManager<SwishUser> SignInManager
+@inject UserManager<SwishUser> UserManager
+
+<ul class="navbar-nav flex-row">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <partial name="_NotificationPartial" />
+
+        <li class="nav-item">
+            <div id="UserDropDown" class="dropdown m-auto">
+                <a class="nav-link text-dark" id="UserDropDownBtn" data-display="static" aria-haspopup="true" aria-expanded="false">
+                    <img style="max-width:35px; max-height:35px;" src="/Images/@UserManager.FindByNameAsync(User.Identity.Name).Result.PPicPath" />
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" id="UserDropDownMenu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-item ">
+                        <div class="row">
+                            <div class="col-auto p-0 pr-1"><img style="max-width:35px; max-height:35px;" src="/Images/@UserManager.FindByNameAsync(User.Identity.Name).Result.PPicPath" /></div>
+                            <div class="col-auto p-0 m-auto"><b id="MUname">@User.Identity.Name</b></div>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item custom-control custom-switch">
+                        <input style="position:relative" type="checkbox" class="custom-control-input" id="darkSwitch" />
+                        <label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item">
+                        <a class="text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account settings</a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="btn btn-link text-dark m-0 p-0">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

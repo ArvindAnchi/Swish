@@ -1,0 +1,59 @@
+﻿@page
+@model BlockedUsersModel
+@{
+    ViewData["ActivePage"] = ManageNavPages.BlockedUsers;
+}
+
+<h4>Blocked Users</h4>
+
+<form id="profile-form" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                @*<label asp-for="UserID"></label>*@
+                @foreach (var TUser in ViewData["ResUsers"] as List<Swish.Areas.Identity.Data.SwishUser>)
+                {
+                    <div class="list-group-item"
+                         id="UserBtn"
+                         onclick="UserBtnClick('@TUser.Id', '@TUser.UserName')">
+                        <div class="row">
+                            <div class="col-auto mr-2">
+                                <img class="rounded-circle"
+                                     style="width:35px;height:35px"
+                                     src="~/Images/@TUser.PPicPath" />
+                            </div>
+                            <div class="col-auto">
+                                <div class="row">
+                                    <div class="col-form-label p-0" id="@TUser.UserName">@TUser.FName @TUser.LName <h6><small>@TUser.UserName</small></h6></div>
+                                </div>
+                                <div class="row" id="@TUser.Id"></div>
+                            </div>
+                            <div class="col text-right">
+                                <a asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Profile"
+                                   asp-route-User="@TUser.UserName"                                   
+                                   class="btn btn-primary">Visit Profile</a> 
+                                <a asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="UnblockUser"
+                                   asp-route-User="@TUser.UserName"
+                                   asp-route-returnUrl="/Identity/Account/Manage/BlockedUsers"
+                                   class="btn btn-danger">Unblock User</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(function () {
+            document.getElementById("Blocked-Users").classList.add("active")
+        });
+    </script>
+}

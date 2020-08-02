@@ -1,0 +1,33 @@
+﻿<li class="nav-item m-auto">
+    <div id="NotifDropDown" class="dropdown m-auto">
+        <a href="#" rel="popover" class="btn btn-link nav-link text-dark m-auto" id="NotifDropDownBtn" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <h5 class="m-0 mr-3">
+                <i class="fas fa-bell"></i>
+                <sup><label id="NotifCount" class="badge badge-pill badge-danger"></label></sup>
+            </h5>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" style="width:500px" id="NotifDropDownMenu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item ">
+                <div class="row">
+                    <div class="col-auto m-auto p-0">Notifications</div>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item">
+                <div id="NotifLoading" class="text-center">
+                    <div class="spinner-border text-secondary" style="width: 1rem; height: 1rem" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="Notif-messages">
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item">
+                <div class="text-center">
+                    <img style="max-width: 20px; max-height:20px" src="~/Images/Swish.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

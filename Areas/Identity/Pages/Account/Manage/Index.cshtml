@@ -1,0 +1,80 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h4>Change your details</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<form id="profile-form" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.FName"></label>
+                <input asp-for="Input.FName" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.LName"></label>
+                <input asp-for="Input.LName" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.DOB"></label>
+                <input asp-for="Input.DOB" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Gender"></label>
+                <input id="Gender" asp-for="Input.Gender" hidden readonly />
+
+                <select class="form-control" id="GenderSel" name="Gender" onchange="document.getElementById('Gender').value=(this.value)" value="document.getElementById('Gender').value">
+                    <option value="" selected disabled hidden></option>
+                    <option value="Male" id="Male">Male</option>
+                    <option value="Female" id="Female">Female</option>
+                    <option value="Other" id="Other">Other</option>
+                </select>
+
+                @*@Html.DropDownList("Gender",
+                    new SelectListItem[]
+                    {
+                        new SelectListItem{ Text="Male", Value="Male"},
+                        new SelectListItem{ Text="Female", Value="Female"},
+                        new SelectListItem{ Text="Other", Value="Other"}
+                    }, "",
+                    new
+                    {
+                        @onchange = "document.getElementById('Gender').value=(this.value)",
+                             @class = "form-control"
+                    })*@
+
+                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update profile</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#GenderSel").val($("#Gender").val());
+        });
+    </script>
+}
